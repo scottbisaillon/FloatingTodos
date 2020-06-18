@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/todoListFragment">
+
+    <fragment
+        android:id="@+id/todoListFragment"
+        android:name="com.scottbisaillon.floatingtodos.ui.todo_list.TodoListFragment"
+        android:label="Floating Todos"
+        tools:layout="@layout/todo_list_fragment" >
+        <action
+            android:id="@+id/action_todoListFragment_to_newTodoFragment"
+            app:destination="@id/newTodoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newTodoFragment"
+        android:name="com.scottbisaillon.floatingtodos.ui.new_todo.NewTodoFragment"
+        android:label="New Todo"
+        tools:layout="@layout/new_todo_fragment" />
+</navigation>

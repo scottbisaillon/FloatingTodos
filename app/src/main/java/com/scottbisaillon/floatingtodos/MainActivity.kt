@@ -2,17 +2,20 @@ package com.scottbisaillon.floatingtodos
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.scottbisaillon.floatingtodos.ui.main.MainFragment
+import androidx.appcompat.widget.Toolbar
+
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow()
-        }
+
+        val navController = findNavController(R.id.nav_host_fragment)
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        findViewById<Toolbar>(R.id.my_toolbar).setupWithNavController(navController, appBarConfiguration)
     }
 }
