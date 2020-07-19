@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.data.Todo
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
+import java.util.*
 
 class NewTodoFragment : Fragment() {
 
@@ -33,7 +34,7 @@ class NewTodoFragment : Fragment() {
 
         view.findViewById<Button>(R.id.btnSave).setOnClickListener {
             hideKeyboard()
-            viewModel.insertTodo(Todo(title = etTodoTitle.text.toString()))
+            viewModel.insertTodo(Todo(todoId = UUID.randomUUID().toString(), title = etTodoTitle.text.toString()))
             Navigation.findNavController(it).popBackStack()
         }
 

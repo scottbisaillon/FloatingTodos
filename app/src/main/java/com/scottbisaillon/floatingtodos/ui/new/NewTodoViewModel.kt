@@ -4,20 +4,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.scottbisaillon.floatingtodos.data.AppDatabase
-import com.scottbisaillon.floatingtodos.data.Repository
+import com.scottbisaillon.floatingtodos.data.TodoRepository
 import com.scottbisaillon.floatingtodos.data.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewTodoViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: Repository
+    private val todoRepository: TodoRepository
 
     init {
         val todoDao = AppDatabase.getDatabase(application).todoDao()
-        repository = Repository(todoDao)
+        todoRepository = TodoRepository.getInstance(todoDao)
     }
 
     fun insertTodo(todo: Todo) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertTodo(todo)
+        todoRepository.insertTodo(todo)
     }
 }

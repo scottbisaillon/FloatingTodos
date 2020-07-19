@@ -6,6 +6,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "todos")
 data class Todo(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id: Int? = null,
+    @PrimaryKey @ColumnInfo (name = "id") var todoId: String,
     @ColumnInfo(name = "title") val title: String
-)
+) {
+    override fun toString(): String {
+        return "Todo(todoId='$todoId', title='$title')"
+    }
+}

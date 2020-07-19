@@ -6,18 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.scottbisaillon.floatingtodos.R
+import com.scottbisaillon.floatingtodos.databinding.TodoListFragmentBinding
 
 class TodoListFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = TodoListFragment()
-    }
 
     private val viewModel: TodoListViewModel by viewModels()
 
@@ -25,19 +20,23 @@ class TodoListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.todo_list_fragment, container, false)
+        val binding = TodoListFragmentBinding.inflate(inflater, container, false)
+        context ?: return binding.root
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rvTodoList)
-        val adapter = TodoListAdapter(view.context)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
+        val adapter = TodoListAdapter()
+        binding.todoList.adapter = adapter
 
-        viewModel.todoList.observe(viewLifecycleOwner, Observer { todoList ->
-            todoList?.let { adapter.setWords(it) }
-        })
+        viewModel.todoList.observe(viewLifecycleOwner) { todoList ->
+            adapter.submitList(todoList)
+        }
 
-        view.findViewById<FloatingActionButton>(R.id.fabNewTodo).setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_todoListFragment_to_newTodoFragment, null))
+        binding.newTodo.setOnClickListener(
+            Navigation.createNavigateOnClickListener(
+                R.id.action_todoListFragment_to_newTodoFragment,
+                null
+            )
+        )
 
-        return view
+        return binding.root
     }
 }

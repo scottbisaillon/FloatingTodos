@@ -13,10 +13,21 @@
         <action
             android:id="@+id/action_todoListFragment_to_newTodoFragment"
             app:destination="@id/newTodoFragment" />
+        <action
+            android:id="@+id/action_todoListFragment_to_todoDetailsFragment"
+            app:destination="@id/todoDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newTodoFragment"
         android:name="com.scottbisaillon.floatingtodos.ui.new.NewTodoFragment"
         android:label="New Todo"
         tools:layout="@layout/new_todo_fragment" />
+    <fragment
+        android:id="@+id/todoDetailsFragment"
+        android:name="com.scottbisaillon.floatingtodos.ui.detail.TodoDetailsFragment"
+        android:label="TodoDetailsFragment">
+        <argument
+            android:name="todoId"
+            app:argType="string"	/>
+    </fragment>
 </navigation>
