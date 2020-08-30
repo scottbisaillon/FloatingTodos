@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.Navigation
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.databinding.TodoListFragmentBinding
+import com.scottbisaillon.floatingtodos.ui.BaseFragment
 
-class TodoListFragment : Fragment() {
+class TodoListFragment : BaseFragment() {
 
     private val viewModel: TodoListViewModel by viewModels()
 

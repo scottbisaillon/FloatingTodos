@@ -1,6 +1,5 @@
 package com.scottbisaillon.floatingtodos.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scottbisaillon.floatingtodos.data.Todo

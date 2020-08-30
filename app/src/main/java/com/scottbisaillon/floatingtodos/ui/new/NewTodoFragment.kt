@@ -6,23 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.fragment.app.Fragment
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.data.Todo
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
+import com.scottbisaillon.floatingtodos.ui.BaseFragment
 import java.util.*
 
-class NewTodoFragment : Fragment() {
+class NewTodoFragment : BaseFragment() {
 
     private val viewModel: NewTodoViewModel by viewModels()
     private lateinit var etTodoTitle: EditText
-
-    companion object {
-        fun newInstance() = NewTodoFragment()
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,10 +30,19 @@ class NewTodoFragment : Fragment() {
 
         view.findViewById<Button>(R.id.btnSave).setOnClickListener {
             hideKeyboard()
-            viewModel.insertTodo(Todo(todoId = UUID.randomUUID().toString(), title = etTodoTitle.text.toString()))
+            viewModel.insertTodo(
+                Todo(
+                    todoId = UUID.randomUUID().toString(),
+                    title = etTodoTitle.text.toString()
+                )
+            )
             Navigation.findNavController(it).popBackStack()
         }
 
         return view
+    }
+
+    override fun onNavigateUp() {
+        Toast.makeText(context, "NewTodoFragment, onNavigateUp", Toast.LENGTH_LONG).show()
     }
 }
