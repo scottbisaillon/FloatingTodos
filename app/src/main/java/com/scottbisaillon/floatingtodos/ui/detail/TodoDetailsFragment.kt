@@ -29,7 +29,6 @@ class TodoDetailsFragment : BaseFragment() {
         InjectorUtils.provideTodoDetailsViewModelFactory(requireActivity(), args.todoId)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,11 +49,14 @@ class TodoDetailsFragment : BaseFragment() {
             viewModel = todoDetailsViewModel
             lifecycleOwner = viewLifecycleOwner
 
+            todoTitle.clearFocus()
+
             // TODO: Add a text watcher to determine if any data has changed
             todoTitle.setOnEditorActionListener { view, i, _ ->
                 when (i) {
                     EditorInfo.IME_ACTION_DONE -> {
                         todoDetailsViewModel.updateTodo(view.text.toString())
+                        todoTitle.clearFocus()
                     }
                 }
                 hideKeyboard()

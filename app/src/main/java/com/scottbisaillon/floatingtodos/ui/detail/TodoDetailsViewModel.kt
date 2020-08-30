@@ -6,6 +6,8 @@ import com.scottbisaillon.floatingtodos.data.Todo
 import com.scottbisaillon.floatingtodos.data.TodoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.util.Date
 
 class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: String) : ViewModel() {
     val todo = todoRepository.getTodo(todoId)
@@ -13,7 +15,7 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: S
     fun updateTodo(newTitle: String) = viewModelScope.launch(Dispatchers.IO) {
         todo.value?.let {
             if (it.title != newTitle) {
-                todoRepository.updateTodo(Todo(todoId = it.todoId, title = newTitle))
+                todoRepository.updateTodo(Todo(todoId = it.todoId, title = newTitle, updatedAt = Instant.now()))
             }
         }
     }

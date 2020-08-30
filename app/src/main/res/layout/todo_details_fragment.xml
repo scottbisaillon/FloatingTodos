@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
+                android:inputType="textCapWords"
                 android:hint="Title"
                 android:text="@{viewModel.todo.title}" />
         </com.google.android.material.textfield.TextInputLayout>

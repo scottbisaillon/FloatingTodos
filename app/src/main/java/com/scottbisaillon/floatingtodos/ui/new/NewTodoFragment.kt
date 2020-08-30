@@ -13,6 +13,7 @@ import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.data.Todo
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
 import com.scottbisaillon.floatingtodos.ui.BaseFragment
+import java.time.Instant
 import java.util.*
 
 class NewTodoFragment : BaseFragment() {
@@ -33,7 +34,8 @@ class NewTodoFragment : BaseFragment() {
             viewModel.insertTodo(
                 Todo(
                     todoId = UUID.randomUUID().toString(),
-                    title = etTodoTitle.text.toString()
+                    title = etTodoTitle.text.toString(),
+                    updatedAt = Instant.now()
                 )
             )
             Navigation.findNavController(it).popBackStack()
