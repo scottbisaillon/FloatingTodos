@@ -27,7 +27,7 @@ class NewTodoFragment : BaseFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.new_todo_fragment, container, false)
 
-        etTodoTitle = view.findViewById(R.id.etTodoTitle)
+        etTodoTitle = view.findViewById(R.id.todo_title)
 
         view.findViewById<Button>(R.id.btnSave).setOnClickListener {
             hideKeyboard()

@@ -7,19 +7,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.new.NewTodoFragment">
 
-    <EditText
-        android:id="@+id/etTodoTitle"
-        android:layout_width="0dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/todo_title_input_layout"
+        android:layout_width="391dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Title"
-        android:inputType="textPersonName"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/todo_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:inputType="textCapWords"
+            android:hint="Title"
+            android:text="@{viewModel.todo.title}" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnSave"
@@ -29,5 +38,5 @@
         android:layout_marginEnd="16dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etTodoTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/todo_title_input_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
