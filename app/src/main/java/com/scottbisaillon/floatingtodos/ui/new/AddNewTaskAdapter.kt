@@ -1,0 +1,19 @@
+package com.scottbisaillon.floatingtodos.ui.new
+
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+
+class AddNewTaskAdapter(private val add: () -> Unit): RecyclerView.Adapter<AddNewTaskViewHolder>() {
+
+    override fun onBindViewHolder(holder: AddNewTaskViewHolder, position: Int) {
+        // There is nothing to do here
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddNewTaskViewHolder {
+        return AddNewTaskViewHolder.create(parent, add)
+    }
+
+    override fun getItemViewType(position: Int): Int = 0
+
+    override fun getItemCount(): Int = 1
+}

@@ -1,8 +1,13 @@
 package com.scottbisaillon.floatingtodos.data
 
 import androidx.lifecycle.LiveData
+import com.scottbisaillon.floatingtodos.data.daos.TodoDao
+import com.scottbisaillon.floatingtodos.data.daos.TodoTaskDao
+import com.scottbisaillon.floatingtodos.data.entities.Todo
+import com.scottbisaillon.floatingtodos.data.entities.TodoTask
+import com.scottbisaillon.floatingtodos.data.entities.TodoWithTasks
 
-class TodoRepository (private val todoDao: TodoDao) {
+class TodoRepository (private val todoDao: TodoDao, private val todoTaskDao: TodoTaskDao) {
 
     val todoList = todoDao.getAllTodos()
 
@@ -16,12 +21,19 @@ class TodoRepository (private val todoDao: TodoDao) {
 
     fun getTodo(todoId: String): LiveData<Todo> = todoDao.getTodo(todoId)
 
+    fun getTodoWithTasks(todoId: String): LiveData<TodoWithTasks> = todoDao.getTodoWithTasks(todoId)
+
+    suspend fun insertTodoTasks(todoTask: List<TodoTask>) {
+        todoTaskDao.insertTodoTasks(todoTask)
+
+    }
+
     companion object {
 
         @Volatile private var instance: TodoRepository? = null
 
-        fun getInstance(todoDao: TodoDao) = instance ?: synchronized(this) {
-            instance ?: TodoRepository(todoDao).also { instance = it }
+        fun getInstance(todoDao: TodoDao, todoTaskDao: TodoTaskDao) = instance ?: synchronized(this) {
+            instance ?: TodoRepository(todoDao, todoTaskDao).also { instance = it }
         }
     }
 

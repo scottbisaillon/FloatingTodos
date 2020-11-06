@@ -1,4 +1,4 @@
-package com.scottbisaillon.floatingtodos.data
+package com.scottbisaillon.floatingtodos.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

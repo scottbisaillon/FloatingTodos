@@ -8,7 +8,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.scottbisaillon.floatingtodos.R
-import com.scottbisaillon.floatingtodos.utilities.Event
 import com.scottbisaillon.floatingtodos.utilities.VoidEvent
 
 class MainActivity : AppCompatActivity() {

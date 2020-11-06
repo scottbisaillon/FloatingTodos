@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.scottbisaillon.floatingtodos.extensions.observeEvent
 
-open class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
 
     private val model: SharedViewModel by activityViewModels()
 

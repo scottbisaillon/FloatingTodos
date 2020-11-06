@@ -7,7 +7,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.scottbisaillon.floatingtodos.data.Todo
+import com.scottbisaillon.floatingtodos.data.entities.Todo
 import com.scottbisaillon.floatingtodos.databinding.TodoListItemBinding
 
 class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallback()) {
@@ -39,15 +39,11 @@ class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallb
         }
 
         private fun navigateToTodo(todo: Todo, view: View) {
-            val direction = todo.todoId?.let {
-                TodoListFragmentDirections.actionTodoListFragmentToTodoDetailsFragment(
-                    it
-                )
+            val direction = todo.todoId.let {
+                TodoListFragmentDirections.actionTodoListFragmentToTodoDetailsFragment(it)
             }
 
-            if (direction != null) {
-                view.findNavController().navigate(direction)
-            }
+            view.findNavController().navigate(direction)
         }
 
         fun bind(item: Todo) {

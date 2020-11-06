@@ -5,17 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ConcatAdapter
 import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.databinding.TodoDetailsFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
-import com.scottbisaillon.floatingtodos.ui.BaseFragment
-import com.scottbisaillon.floatingtodos.utilities.InjectorUtils
+import com.scottbisaillon.floatingtodos.extensions.observeEvent
+import com.scottbisaillon.floatingtodos.ui.SharedViewModel
+import com.scottbisaillon.floatingtodos.ui.new.AddNewTaskAdapter
+import com.scottbisaillon.floatingtodos.ui.new.TaskAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 class TodoDetailsFragment : BaseFragment() {
 
@@ -24,6 +30,8 @@ class TodoDetailsFragment : BaseFragment() {
     private val args: TodoDetailsFragmentArgs by navArgs()
 
     private lateinit var binding: TodoDetailsFragmentBinding;
+    private val adapter = TaskAdapter()
+    private lateinit var addNewTaskAdapter: AddNewTaskAdapter
 
     private val todoDetailsViewModel: TodoDetailsViewModel by viewModels {
         InjectorUtils.provideTodoDetailsViewModelFactory(requireActivity(), args.todoId)
@@ -49,8 +57,6 @@ class TodoDetailsFragment : BaseFragment() {
             viewModel = todoDetailsViewModel
             lifecycleOwner = viewLifecycleOwner
 
-            todoTitle.clearFocus()
-
             // TODO: Add a text watcher to determine if any data has changed
             todoTitle.setOnEditorActionListener { view, i, _ ->
                 when (i) {
@@ -63,10 +69,19 @@ class TodoDetailsFragment : BaseFragment() {
                 true
             }
 
-            
-
             todoTitle.clearFocus()
         }
+
+        addNewTaskAdapter = AddNewTaskAdapter { todoDetailsViewModel.addNewTask() }
+        binding.taskList.adapter = ConcatAdapter(
+            adapter,
+            addNewTaskAdapter
+        )
+
+        todoDetailsViewModel.todoTaskList.observe(viewLifecycleOwner) {
+                taskList -> adapter.submitList(ArrayList(taskList))
+        }
+
 
         return binding.root
     }

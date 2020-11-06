@@ -12,7 +12,7 @@
 
         <variable
             name="todo"
-            type="com.scottbisaillon.floatingtodos.data.Todo" />
+            type="com.scottbisaillon.floatingtodos.data.entities.Todo" />
 
     </data>
 
