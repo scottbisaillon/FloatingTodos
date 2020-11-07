@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.ConcatAdapter.Config
 import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.databinding.TodoDetailsFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
@@ -28,7 +29,7 @@ class TodoDetailsFragment : BaseFragment() {
 
     private lateinit var binding: TodoDetailsFragmentBinding;
 
-    private val adapter = TaskAdapter()
+    private lateinit var adapter: TaskAdapter
     private lateinit var addNewTaskAdapter: AddNewTaskAdapter
 
     private val todoDetailsViewModel: TodoDetailsViewModel by viewModels {
@@ -68,10 +69,12 @@ class TodoDetailsFragment : BaseFragment() {
             }
         }
 
+        adapter = TaskAdapter(todoDetailsViewModel::removeTask)
         addNewTaskAdapter = AddNewTaskAdapter { todoDetailsViewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
+            Config.Builder().setIsolateViewTypes(true).setStableIdMode(Config.StableIdMode.ISOLATED_STABLE_IDS).build(),
             adapter,
-            addNewTaskAdapter
+            addNewTaskAdapter,
         )
 
         todoDetailsViewModel.todoWithTasks.observe(viewLifecycleOwner) { todoWithTasks ->

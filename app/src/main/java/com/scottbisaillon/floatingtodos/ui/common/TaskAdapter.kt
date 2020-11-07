@@ -6,15 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.scottbisaillon.floatingtodos.data.entities.TodoTask
 import com.scottbisaillon.floatingtodos.databinding.TaskListItemBinding
+import kotlinx.coroutines.Job
 
-class TaskAdapter : ListAdapter<TodoTask, TaskViewHolder>(TASK_COMPARATOR) {
+class TaskAdapter(private val removeTask: (todoTask: TodoTask) -> Unit) : ListAdapter<TodoTask, TaskViewHolder>(TASK_COMPARATOR) {
 
     init {
-        setHasStableIds(true)
+//        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder =
-        TaskViewHolder(TaskListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        TaskViewHolder(TaskListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), removeTask)
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val todoTask = getItem(position)

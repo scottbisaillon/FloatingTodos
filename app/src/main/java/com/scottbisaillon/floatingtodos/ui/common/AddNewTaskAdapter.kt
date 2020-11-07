@@ -5,8 +5,16 @@ import androidx.recyclerview.widget.RecyclerView
 
 class AddNewTaskAdapter(private val addTask: () -> Unit): RecyclerView.Adapter<AddNewTaskViewHolder>() {
 
+    init {
+//        setHasStableIds(true)
+    }
+
     override fun onBindViewHolder(holder: AddNewTaskViewHolder, position: Int) {
         // There is nothing to do here
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddNewTaskViewHolder {

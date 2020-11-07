@@ -44,4 +44,9 @@ class NewTodoViewModel(application: Application) : AndroidViewModel(application)
         )
         todoTaskList.value = todoTaskList.value;
     }
+
+    fun removeTask(todoTask: TodoTask) {
+        todoTaskList.value?.remove(todoTask)
+        todoTaskList.value = todoTaskList.value
+    }
 }

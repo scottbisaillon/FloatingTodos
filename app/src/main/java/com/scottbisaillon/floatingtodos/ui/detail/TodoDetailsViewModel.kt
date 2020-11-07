@@ -51,4 +51,10 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: S
             )
         }
     }
+
+    fun removeTask(todoTask: TodoTask) = viewModelScope.launch(Dispatchers.IO) {
+        todoWithTasks.value?.let {
+            todoRepository.deleteTodoTask(todoTask)
+        }
+    }
 }

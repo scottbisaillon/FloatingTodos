@@ -33,6 +33,10 @@ class TodoRepository (private val todoDao: TodoDao, private val todoTaskDao: Tod
         todoTaskDao.updateTodoTasks(todoTasks)
     }
 
+    suspend fun deleteTodoTask(todoTask: TodoTask) {
+        todoTaskDao.deleteTodoTask(todoTask)
+    }
+
     companion object {
 
         @Volatile private var instance: TodoRepository? = null

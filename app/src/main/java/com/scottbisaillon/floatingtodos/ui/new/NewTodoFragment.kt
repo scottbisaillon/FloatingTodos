@@ -26,7 +26,7 @@ class NewTodoFragment : BaseFragment() {
         val binding = NewTodoFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val adapter = TaskAdapter()
+        val adapter = TaskAdapter(viewModel::removeTask)
 
         binding.btnSave.setOnClickListener {
             hideKeyboard()
