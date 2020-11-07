@@ -15,8 +15,8 @@ import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.databinding.TodoDetailsFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
 import com.scottbisaillon.floatingtodos.ui.BaseFragment
-import com.scottbisaillon.floatingtodos.ui.new.AddNewTaskAdapter
-import com.scottbisaillon.floatingtodos.ui.new.TaskAdapter
+import com.scottbisaillon.floatingtodos.ui.common.AddNewTaskAdapter
+import com.scottbisaillon.floatingtodos.ui.common.TaskAdapter
 import com.scottbisaillon.floatingtodos.utilities.InjectorUtils
 import java.util.*
 
@@ -88,6 +88,7 @@ class TodoDetailsFragment : BaseFragment() {
     override fun onNavigateUp() {
         // TODO: If any data has changed and has not been committed, show a confirmation dialog
         todoDetailsViewModel.updateTodo(binding.todoTitle.text.toString())
+        todoDetailsViewModel.updateTodoTasks(adapter.currentList)
         hideKeyboard()
     }
 }

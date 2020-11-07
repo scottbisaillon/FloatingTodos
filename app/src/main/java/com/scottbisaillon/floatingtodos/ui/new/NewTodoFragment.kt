@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ConcatAdapter
-import com.scottbisaillon.floatingtodos.data.entities.Todo
 import com.scottbisaillon.floatingtodos.databinding.NewTodoFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
 import com.scottbisaillon.floatingtodos.ui.BaseFragment
-import java.time.Instant
+import com.scottbisaillon.floatingtodos.ui.common.AddNewTaskAdapter
+import com.scottbisaillon.floatingtodos.ui.common.TaskAdapter
 import java.util.*
 
 class NewTodoFragment : BaseFragment() {

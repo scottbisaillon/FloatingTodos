@@ -32,6 +32,12 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: S
         }
     }
 
+    fun updateTodoTasks(todoTasks: List<TodoTask>) = viewModelScope.launch(Dispatchers.IO) {
+        todoTaskList.value?.let {
+            todoRepository.updateTodoTasks(it)
+        }
+    }
+
     fun addNewTask() = viewModelScope.launch(Dispatchers.IO) {
         todoWithTasks.value?.let {
             todoRepository.insertTodoTask(

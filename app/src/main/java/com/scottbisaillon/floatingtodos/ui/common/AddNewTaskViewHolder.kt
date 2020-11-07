@@ -1,4 +1,4 @@
-package com.scottbisaillon.floatingtodos.ui.new
+package com.scottbisaillon.floatingtodos.ui.common
 
 import android.view.LayoutInflater
 import android.view.View

@@ -29,6 +29,10 @@ class TodoRepository (private val todoDao: TodoDao, private val todoTaskDao: Tod
         todoTaskDao.insertTodoTasks(todoTask)
     }
 
+    suspend fun updateTodoTasks(todoTasks: List<TodoTask>) {
+        todoTaskDao.updateTodoTasks(todoTasks)
+    }
+
     companion object {
 
         @Volatile private var instance: TodoRepository? = null
