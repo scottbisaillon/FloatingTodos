@@ -1,27 +1,34 @@
 package com.scottbisaillon.floatingtodos.ui.new
 
-import androidx.hilt.lifecycle.ViewModelInject
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.scottbisaillon.floatingtodos.data.AppDatabase
 import com.scottbisaillon.floatingtodos.data.TodoRepository
 import com.scottbisaillon.floatingtodos.data.entities.Todo
 import com.scottbisaillon.floatingtodos.data.entities.TodoTask
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Instant
+
 import java.util.*
 
 class NewTodoViewModel(application: Application) : AndroidViewModel(application) {
     private val todoRepository: TodoRepository
+    val todoTaskList: MutableLiveData<MutableList<TodoTask>> = MutableLiveData()
+    private val todoId = UUID.randomUUID().toString()
 
     init {
         val todoDao = AppDatabase.getDatabase(application).todoDao()
-        todoRepository = TodoRepository.getInstance(todoDao)
+        val todoTaskDao = AppDatabase.getDatabase(application).todoTaskDao()
+        todoRepository = TodoRepository.getInstance(todoDao, todoTaskDao)
+        todoTaskList.value = mutableListOf()
     }
 
-    fun insertTodo(todo: Todo, todoTasks: List<TodoTask>) = viewModelScope.launch(Dispatchers.IO) {
-        todo.todoId = todoId
-        todoRepository.insertTodo(todo)
+    fun insertTodo(title: String, todoTasks: List<TodoTask>) = viewModelScope.launch(Dispatchers.IO) {
+        todoRepository.insertTodo(Todo(todoId = todoId, title = title, updatedAt = Instant.now()))
         todoRepository.insertTodoTasks(todoTasks)
     }
 

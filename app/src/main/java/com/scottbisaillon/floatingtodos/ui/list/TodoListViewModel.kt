@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.scottbisaillon.floatingtodos.data.AppDatabase
 import com.scottbisaillon.floatingtodos.data.TodoRepository
-import com.scottbisaillon.floatingtodos.data.Todo
+import com.scottbisaillon.floatingtodos.data.entities.Todo
 
 class TodoListViewModel(application: Application) : AndroidViewModel(application) {
     private val todoRepository: TodoRepository
@@ -14,7 +14,8 @@ class TodoListViewModel(application: Application) : AndroidViewModel(application
 
     init {
         val todoDao = AppDatabase.getDatabase(application).todoDao()
-        todoRepository = TodoRepository.getInstance(todoDao)
+        val todoTaskDao = AppDatabase.getDatabase(application).todoTaskDao()
+        todoRepository = TodoRepository.getInstance(todoDao, todoTaskDao)
         todoList = todoRepository.todoList
     }
 }

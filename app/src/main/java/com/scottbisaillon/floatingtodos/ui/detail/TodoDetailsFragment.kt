@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,11 +14,10 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.databinding.TodoDetailsFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
-import com.scottbisaillon.floatingtodos.extensions.observeEvent
-import com.scottbisaillon.floatingtodos.ui.SharedViewModel
+import com.scottbisaillon.floatingtodos.ui.BaseFragment
 import com.scottbisaillon.floatingtodos.ui.new.AddNewTaskAdapter
 import com.scottbisaillon.floatingtodos.ui.new.TaskAdapter
-import dagger.hilt.android.AndroidEntryPoint
+import com.scottbisaillon.floatingtodos.utilities.InjectorUtils
 import java.util.*
 
 class TodoDetailsFragment : BaseFragment() {
@@ -30,6 +27,7 @@ class TodoDetailsFragment : BaseFragment() {
     private val args: TodoDetailsFragmentArgs by navArgs()
 
     private lateinit var binding: TodoDetailsFragmentBinding;
+
     private val adapter = TaskAdapter()
     private lateinit var addNewTaskAdapter: AddNewTaskAdapter
 
@@ -68,8 +66,6 @@ class TodoDetailsFragment : BaseFragment() {
                 hideKeyboard()
                 true
             }
-
-            todoTitle.clearFocus()
         }
 
         addNewTaskAdapter = AddNewTaskAdapter { todoDetailsViewModel.addNewTask() }
@@ -78,10 +74,13 @@ class TodoDetailsFragment : BaseFragment() {
             addNewTaskAdapter
         )
 
-        todoDetailsViewModel.todoTaskList.observe(viewLifecycleOwner) {
-                taskList -> adapter.submitList(ArrayList(taskList))
+        todoDetailsViewModel.todoWithTasks.observe(viewLifecycleOwner) { todoWithTasks ->
+            todoDetailsViewModel.todoTaskList.value = todoWithTasks.tasks
         }
 
+        todoDetailsViewModel.todoTaskList.observe(viewLifecycleOwner) { taskList ->
+            adapter.submitList(ArrayList(taskList))
+        }
 
         return binding.root
     }

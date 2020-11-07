@@ -9,4 +9,7 @@ interface TodoTaskDao {
 
     @Insert
     suspend fun insertTodoTasks(todoTasks: List<TodoTask>)
+
+    @Insert
+    suspend fun insertTodoTask(todoTask: TodoTask)
 }

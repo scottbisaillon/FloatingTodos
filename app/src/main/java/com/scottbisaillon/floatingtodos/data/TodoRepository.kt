@@ -19,13 +19,14 @@ class TodoRepository (private val todoDao: TodoDao, private val todoTaskDao: Tod
         todoDao.updateTodo(todo)
     }
 
-    fun getTodo(todoId: String): LiveData<Todo> = todoDao.getTodo(todoId)
-
     fun getTodoWithTasks(todoId: String): LiveData<TodoWithTasks> = todoDao.getTodoWithTasks(todoId)
+
+    suspend fun insertTodoTask(todoTask: TodoTask) {
+        todoTaskDao.insertTodoTask(todoTask)
+    }
 
     suspend fun insertTodoTasks(todoTask: List<TodoTask>) {
         todoTaskDao.insertTodoTasks(todoTask)
-
     }
 
     companion object {
