@@ -28,6 +28,6 @@
         android:label="TodoDetailsFragment">
         <argument
             android:name="todoId"
-            app:argType="string"	/>
+            app:argType="long"	/>
     </fragment>
 </navigation>

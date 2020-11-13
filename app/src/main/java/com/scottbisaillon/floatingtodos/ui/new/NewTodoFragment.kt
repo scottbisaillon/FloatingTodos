@@ -12,7 +12,7 @@ import com.scottbisaillon.floatingtodos.databinding.NewTodoFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
 import com.scottbisaillon.floatingtodos.ui.BaseFragment
 import com.scottbisaillon.floatingtodos.ui.common.AddNewTaskAdapter
-import com.scottbisaillon.floatingtodos.ui.common.TaskAdapter
+import com.scottbisaillon.floatingtodos.ui.common.TodoTaskAdapter
 import java.util.*
 
 class NewTodoFragment : BaseFragment() {
@@ -26,27 +26,27 @@ class NewTodoFragment : BaseFragment() {
         val binding = NewTodoFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val adapter = TaskAdapter(viewModel::removeTask)
+        val todoTaskAdapter = TodoTaskAdapter(viewModel::removeTask)
 
         binding.btnSave.setOnClickListener {
             hideKeyboard()
             viewModel.insertTodo(
                 title = binding.todoTitle.text.toString(),
-                adapter.currentList
+                todoTaskAdapter.currentList
             )
             Navigation.findNavController(it).popBackStack()
         }
 
         val addNewTaskAdapter = AddNewTaskAdapter { viewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
-            adapter,
+            todoTaskAdapter,
             addNewTaskAdapter
         )
 
         viewModel.todoTaskList.observe(viewLifecycleOwner) { todoTaskList ->
             // This seems hacky...
-            adapter.submitList(ArrayList(todoTaskList))
-            binding.taskList.scrollToPosition(adapter.itemCount - 1)
+            todoTaskAdapter.submitList(ArrayList(todoTaskList))
+            binding.taskList.scrollToPosition(todoTaskAdapter.itemCount - 1)
         }
 
         return binding.root

@@ -6,7 +6,7 @@ import com.scottbisaillon.floatingtodos.data.TodoRepository
 
 class TodoDetailsViewModelFactory(
     private val todoRepository: TodoRepository,
-    private val todoId: String
+    private val todoId: Long
 ): ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")

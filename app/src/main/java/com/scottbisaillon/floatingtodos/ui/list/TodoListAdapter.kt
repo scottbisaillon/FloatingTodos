@@ -40,7 +40,7 @@ class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallb
 
         private fun navigateToTodo(todo: Todo, view: View) {
             val direction = todo.todoId.let {
-                TodoListFragmentDirections.actionTodoListFragmentToTodoDetailsFragment(it)
+                TodoListFragmentDirections.actionTodoListFragmentToTodoDetailsFragment(it!!)
             }
 
             view.findNavController().navigate(direction)

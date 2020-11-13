@@ -17,8 +17,9 @@ import com.scottbisaillon.floatingtodos.databinding.TodoDetailsFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
 import com.scottbisaillon.floatingtodos.ui.BaseFragment
 import com.scottbisaillon.floatingtodos.ui.common.AddNewTaskAdapter
-import com.scottbisaillon.floatingtodos.ui.common.TaskAdapter
+import com.scottbisaillon.floatingtodos.ui.common.TodoTaskAdapter
 import com.scottbisaillon.floatingtodos.utilities.InjectorUtils
+import com.scottbisaillon.floatingtodos.views.CustomLinearLayoutManager
 import java.util.*
 
 class TodoDetailsFragment : BaseFragment() {
@@ -29,7 +30,7 @@ class TodoDetailsFragment : BaseFragment() {
 
     private lateinit var binding: TodoDetailsFragmentBinding;
 
-    private lateinit var adapter: TaskAdapter
+    private lateinit var todoTaskAdapter: TodoTaskAdapter
     private lateinit var addNewTaskAdapter: AddNewTaskAdapter
 
     private val todoDetailsViewModel: TodoDetailsViewModel by viewModels {
@@ -67,13 +68,15 @@ class TodoDetailsFragment : BaseFragment() {
                 hideKeyboard()
                 true
             }
+
+            executePendingBindings()
         }
 
-        adapter = TaskAdapter(todoDetailsViewModel::removeTask)
+        todoTaskAdapter = TodoTaskAdapter(todoDetailsViewModel::removeTask)
         addNewTaskAdapter = AddNewTaskAdapter { todoDetailsViewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
-            Config.Builder().setIsolateViewTypes(true).setStableIdMode(Config.StableIdMode.ISOLATED_STABLE_IDS).build(),
-            adapter,
+            /*Config.Builder().setIsolateViewTypes(true).setStableIdMode(Config.StableIdMode.ISOLATED_STABLE_IDS).build(),*/
+            todoTaskAdapter,
             addNewTaskAdapter,
         )
 
@@ -82,7 +85,7 @@ class TodoDetailsFragment : BaseFragment() {
         }
 
         todoDetailsViewModel.todoTaskList.observe(viewLifecycleOwner) { taskList ->
-            adapter.submitList(ArrayList(taskList))
+            todoTaskAdapter.submitList(taskList)
         }
 
         return binding.root
@@ -91,7 +94,7 @@ class TodoDetailsFragment : BaseFragment() {
     override fun onNavigateUp() {
         // TODO: If any data has changed and has not been committed, show a confirmation dialog
         todoDetailsViewModel.updateTodo(binding.todoTitle.text.toString())
-        todoDetailsViewModel.updateTodoTasks(adapter.currentList)
+        todoDetailsViewModel.updateTodoTasks(todoTaskAdapter.currentList)
         hideKeyboard()
     }
 }

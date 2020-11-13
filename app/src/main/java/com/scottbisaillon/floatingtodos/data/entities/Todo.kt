@@ -12,7 +12,7 @@ import java.util.*
 
 @Entity(tableName = "todos")
 data class Todo(
-    @PrimaryKey @ColumnInfo(name = "id") var todoId: String,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var todoId: Long? = null,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "updatedAt") val updatedAt: Instant
 ) {

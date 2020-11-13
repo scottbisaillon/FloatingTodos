@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.*
 
-class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: String) :
+class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: Long) :
     ViewModel() {
     val todoWithTasks: LiveData<TodoWithTasks> = todoRepository.getTodoWithTasks(todoId)
     val todoTaskList: MutableLiveData<MutableList<TodoTask>> = MutableLiveData()
@@ -34,7 +34,7 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: S
 
     fun updateTodoTasks(todoTasks: List<TodoTask>) = viewModelScope.launch(Dispatchers.IO) {
         todoTaskList.value?.let {
-            todoRepository.updateTodoTasks(it)
+            todoRepository.updateTodoTasks(todoTasks)
         }
     }
 
@@ -42,7 +42,6 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: S
         todoWithTasks.value?.let {
             todoRepository.insertTodoTask(
                 TodoTask(
-                    taskId = UUID.randomUUID().toString(),
                     completedAt = null,
                     todoId = it.todo.todoId,
                     completed = false,
@@ -52,9 +51,9 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: S
         }
     }
 
-    fun removeTask(todoTask: TodoTask) = viewModelScope.launch(Dispatchers.IO) {
+    fun removeTask(todoTask: TodoTask?) = viewModelScope.launch(Dispatchers.IO) {
         todoWithTasks.value?.let {
-            todoRepository.deleteTodoTask(todoTask)
+            todoTask?.let { it1 -> todoRepository.deleteTodoTask(it1) }
         }
     }
 }

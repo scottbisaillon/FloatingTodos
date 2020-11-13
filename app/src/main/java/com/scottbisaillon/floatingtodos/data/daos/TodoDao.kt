@@ -9,17 +9,17 @@ import com.scottbisaillon.floatingtodos.data.entities.TodoWithTasks
 interface TodoDao {
 
     @Insert
-    suspend fun insertTodo(todo: Todo)
+    suspend fun insertTodo(todo: Todo): Long
 
     @Update
     suspend fun updateTodo(todo: Todo)
 
     @Transaction
     @Query("SELECT * FROM todos where id = :todoId")
-    fun getTodoWithTasks(todoId: String): LiveData<TodoWithTasks>
+    fun getTodoWithTasks(todoId: Long): LiveData<TodoWithTasks>
 
     @Query("SELECT * FROM todos where id = :todoId")
-    fun getTodo(todoId: String): LiveData<Todo>
+    fun getTodo(todoId: Long): LiveData<Todo>
 
     @Query("SELECT * FROM todos")
     fun getAllTodos(): LiveData<List<Todo>>

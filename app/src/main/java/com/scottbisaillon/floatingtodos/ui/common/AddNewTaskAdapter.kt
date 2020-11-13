@@ -3,15 +3,14 @@ package com.scottbisaillon.floatingtodos.ui.common
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class AddNewTaskAdapter(private val addTask: () -> Unit): RecyclerView.Adapter<AddNewTaskViewHolder>() {
+class AddNewTaskAdapter(private val addTask: () -> Unit) :
+    RecyclerView.Adapter<AddNewTaskViewHolder>() {
 
     init {
-//        setHasStableIds(true)
+        setHasStableIds(true)
     }
 
-    override fun onBindViewHolder(holder: AddNewTaskViewHolder, position: Int) {
-        // There is nothing to do here
-    }
+    override fun onBindViewHolder(holder: AddNewTaskViewHolder, position: Int) {}
 
     override fun getItemId(position: Int): Long {
         return position.toLong()

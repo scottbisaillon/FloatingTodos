@@ -15,7 +15,7 @@ object InjectorUtils {
 
     fun provideTodoDetailsViewModelFactory(
         context: Context,
-        todoId: String
+        todoId: Long
     ): TodoDetailsViewModelFactory {
         return TodoDetailsViewModelFactory(getTodoRepository(context), todoId)
     }
