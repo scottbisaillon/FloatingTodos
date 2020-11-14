@@ -16,8 +16,8 @@ import com.scottbisaillon.floatingtodos.ui.common.TodoTaskAdapter
 import java.util.*
 
 class NewTodoFragment : BaseFragment() {
-
     private val viewModel: NewTodoViewModel by viewModels()
+    private lateinit var todoTaskAdapter: TodoTaskAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,8 +25,6 @@ class NewTodoFragment : BaseFragment() {
     ): View {
         val binding = NewTodoFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-
-        val todoTaskAdapter = TodoTaskAdapter(viewModel::removeTask)
 
         binding.btnSave.setOnClickListener {
             hideKeyboard()
@@ -37,6 +35,7 @@ class NewTodoFragment : BaseFragment() {
             Navigation.findNavController(it).popBackStack()
         }
 
+        todoTaskAdapter = TodoTaskAdapter(viewModel::removeTask)
         val addNewTaskAdapter = AddNewTaskAdapter { viewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
             todoTaskAdapter,
@@ -44,15 +43,9 @@ class NewTodoFragment : BaseFragment() {
         )
 
         viewModel.todoTaskList.observe(viewLifecycleOwner) { todoTaskList ->
-            // This seems hacky...
             todoTaskAdapter.submitList(ArrayList(todoTaskList))
-            binding.taskList.scrollToPosition(todoTaskAdapter.itemCount - 1)
         }
 
         return binding.root
-    }
-
-    override fun onNavigateUp() {
-        Toast.makeText(context, "NewTodoFragment, onNavigateUp", Toast.LENGTH_LONG).show()
     }
 }

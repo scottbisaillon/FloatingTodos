@@ -7,44 +7,39 @@ import com.scottbisaillon.floatingtodos.data.entities.Todo
 import com.scottbisaillon.floatingtodos.data.entities.TodoTask
 import com.scottbisaillon.floatingtodos.data.entities.TodoWithTasks
 
-class TodoRepository (private val todoDao: TodoDao, private val todoTaskDao: TodoTaskDao) {
+class TodoRepository(private val todoDao: TodoDao, private val todoTaskDao: TodoTaskDao) {
 
     val todoList = todoDao.getAllTodos()
 
     suspend fun insertTodo(todo: Todo): Long {
-        return todoDao.insertTodo(todo)
+        return todoDao.insert(todo)
     }
 
     suspend fun updateTodo(todo: Todo) {
-        todoDao.updateTodo(todo)
+        todoDao.update(todo)
     }
 
     fun getTodoWithTasks(todoId: Long): LiveData<TodoWithTasks> = todoDao.getTodoWithTasks(todoId)
 
-    suspend fun insertTodoTask(todoTask: TodoTask) {
-        todoTaskDao.insertTodoTask(todoTask)
-    }
-
     suspend fun insertTodoTasks(todoTask: List<TodoTask>) {
-        todoTaskDao.insertTodoTasks(todoTask)
+        todoTaskDao.insert(todoTask)
     }
 
     suspend fun updateTodoTasks(todoTasks: List<TodoTask>) {
-        todoTaskDao.updateTodoTasks(todoTasks)
+        todoTaskDao.insertOrUpdate(todoTasks)
     }
 
-    suspend fun deleteTodoTask(todoTask: TodoTask) {
-        todoTaskDao.deleteTodoTask(todoTask)
+    suspend fun deleteTodoTasks(vararg todoTask: TodoTask?) {
+        todoTaskDao.delete(*todoTask)
     }
 
     companion object {
+        @Volatile
+        private var instance: TodoRepository? = null
 
-        @Volatile private var instance: TodoRepository? = null
-
-        fun getInstance(todoDao: TodoDao, todoTaskDao: TodoTaskDao) = instance ?: synchronized(this) {
-            instance ?: TodoRepository(todoDao, todoTaskDao).also { instance = it }
-        }
+        fun getInstance(todoDao: TodoDao, todoTaskDao: TodoTaskDao) =
+            instance ?: synchronized(this) {
+                instance ?: TodoRepository(todoDao, todoTaskDao).also { instance = it }
+            }
     }
-
-
 }

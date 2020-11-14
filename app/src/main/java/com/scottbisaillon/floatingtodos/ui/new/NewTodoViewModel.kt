@@ -43,6 +43,7 @@ class NewTodoViewModel(application: Application) : AndroidViewModel(application)
     fun addNewTask() {
         todoTaskList.value?.add(
             TodoTask(
+                taskId = UUID.randomUUID().toString(),
                 completedAt = null,
                 todoId = -1, //TODO: Figure out a better placeholder
                 completed = false,

@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.ConcatAdapter.Config
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.scottbisaillon.floatingtodos.R
 import com.scottbisaillon.floatingtodos.databinding.TodoDetailsFragmentBinding
 import com.scottbisaillon.floatingtodos.extensions.hideKeyboard
@@ -19,8 +19,6 @@ import com.scottbisaillon.floatingtodos.ui.BaseFragment
 import com.scottbisaillon.floatingtodos.ui.common.AddNewTaskAdapter
 import com.scottbisaillon.floatingtodos.ui.common.TodoTaskAdapter
 import com.scottbisaillon.floatingtodos.utilities.InjectorUtils
-import com.scottbisaillon.floatingtodos.views.CustomLinearLayoutManager
-import java.util.*
 
 class TodoDetailsFragment : BaseFragment() {
 
@@ -68,14 +66,14 @@ class TodoDetailsFragment : BaseFragment() {
                 hideKeyboard()
                 true
             }
-
             executePendingBindings()
         }
 
+        // FIXME: There is a flicker when a task is deleted
         todoTaskAdapter = TodoTaskAdapter(todoDetailsViewModel::removeTask)
         addNewTaskAdapter = AddNewTaskAdapter { todoDetailsViewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
-            /*Config.Builder().setIsolateViewTypes(true).setStableIdMode(Config.StableIdMode.ISOLATED_STABLE_IDS).build(),*/
+            ConcatAdapter.Config.Builder().setIsolateViewTypes(true).setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build(),
             todoTaskAdapter,
             addNewTaskAdapter,
         )
@@ -85,16 +83,14 @@ class TodoDetailsFragment : BaseFragment() {
         }
 
         todoDetailsViewModel.todoTaskList.observe(viewLifecycleOwner) { taskList ->
-            todoTaskAdapter.submitList(taskList)
+            todoTaskAdapter.submitList(ArrayList(taskList))
         }
 
         return binding.root
     }
 
     override fun onNavigateUp() {
-        // TODO: If any data has changed and has not been committed, show a confirmation dialog
-        todoDetailsViewModel.updateTodo(binding.todoTitle.text.toString())
-        todoDetailsViewModel.updateTodoTasks(todoTaskAdapter.currentList)
+        todoDetailsViewModel.save(binding.todoTitle.toString())
         hideKeyboard()
     }
 }

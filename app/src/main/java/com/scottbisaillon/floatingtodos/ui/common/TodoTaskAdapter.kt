@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.scottbisaillon.floatingtodos.data.entities.TodoTask
 import com.scottbisaillon.floatingtodos.databinding.TaskListItemBinding
-import com.scottbisaillon.floatingtodos.databinding.TodoListItemBinding
-import kotlinx.coroutines.Job
+import java.util.*
 
-class TodoTaskAdapter(private val removeTask: (todoTask: TodoTask?) -> Unit) :
+class TodoTaskAdapter(
+    private val removeTask: (todoTask: TodoTask?) -> Unit
+) :
     ListAdapter<TodoTask, TodoTaskAdapter.ViewHolder>(TASK_COMPARATOR) {
 
     init {
@@ -34,7 +35,8 @@ class TodoTaskAdapter(private val removeTask: (todoTask: TodoTask?) -> Unit) :
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).taskId!!
+
+        return (UUID.fromString(getItem(position).taskId).mostSignificantBits) and Long.MAX_VALUE
     }
 
     override fun getItemViewType(position: Int): Int {

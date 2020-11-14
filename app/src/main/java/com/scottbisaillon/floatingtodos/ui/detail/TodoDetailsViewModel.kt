@@ -17,8 +17,36 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: L
     ViewModel() {
     val todoWithTasks: LiveData<TodoWithTasks> = todoRepository.getTodoWithTasks(todoId)
     val todoTaskList: MutableLiveData<MutableList<TodoTask>> = MutableLiveData()
+    private val deletedTodoTaskList: MutableList<TodoTask?> = mutableListOf()
 
-    fun updateTodo(newTitle: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun addNewTask() {
+        todoWithTasks.value?.let {
+            todoTaskList.value?.add(
+                TodoTask(
+                    taskId = UUID.randomUUID().toString(),
+                    completedAt = null,
+                    todoId = it.todo.todoId,
+                    completed = false,
+                    description = ""
+                )
+            )
+            todoTaskList.value = todoTaskList.value
+        }
+    }
+
+    fun removeTask(todoTask: TodoTask?) {
+        deletedTodoTaskList.add(todoTask)
+        todoTaskList.value?.remove(todoTask)
+        todoTaskList.value = todoTaskList.value
+    }
+
+    fun save(newTitle: String) {
+        updateTodo(newTitle)
+        updateTodoTasks()
+        deleteTodoTasks()
+    }
+
+    private fun updateTodo(newTitle: String) = viewModelScope.launch(Dispatchers.IO) {
         todoWithTasks.value?.let {
             if (it.todo.title != newTitle) {
                 todoRepository.updateTodo(
@@ -32,28 +60,18 @@ class TodoDetailsViewModel(private val todoRepository: TodoRepository, todoId: L
         }
     }
 
-    fun updateTodoTasks(todoTasks: List<TodoTask>) = viewModelScope.launch(Dispatchers.IO) {
+    private fun updateTodoTasks() = viewModelScope.launch(Dispatchers.IO) {
         todoTaskList.value?.let {
-            todoRepository.updateTodoTasks(todoTasks)
+            // TODO: Check to see if the contents have actually changed
+            todoRepository.updateTodoTasks(it)
         }
     }
 
-    fun addNewTask() = viewModelScope.launch(Dispatchers.IO) {
-        todoWithTasks.value?.let {
-            todoRepository.insertTodoTask(
-                TodoTask(
-                    completedAt = null,
-                    todoId = it.todo.todoId,
-                    completed = false,
-                    description = ""
-                )
-            )
-        }
-    }
-
-    fun removeTask(todoTask: TodoTask?) = viewModelScope.launch(Dispatchers.IO) {
-        todoWithTasks.value?.let {
-            todoTask?.let { it1 -> todoRepository.deleteTodoTask(it1) }
+    private fun deleteTodoTasks() = viewModelScope.launch(Dispatchers.IO) {
+        deletedTodoTaskList.let {
+            if (deletedTodoTaskList.isNotEmpty()) {
+                todoRepository.deleteTodoTasks(*it.toTypedArray())
+            }
         }
     }
 }

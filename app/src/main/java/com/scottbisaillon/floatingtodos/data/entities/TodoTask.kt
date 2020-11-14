@@ -11,7 +11,7 @@ import java.util.*
 
 @Entity(tableName = "tasks")
 data class TodoTask(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var taskId: Long? = null,
+    @PrimaryKey @ColumnInfo(name = "id") var taskId: String,
     @ColumnInfo(name = "todoId") var todoId: Long?,
     @ColumnInfo(name = "description") var description: String,
     @ColumnInfo(name = "completed") var completed: Boolean,
@@ -22,9 +22,5 @@ data class TodoTask(
             .withLocale(Locale.US)
             .withZone(ZoneId.systemDefault())
         return formatter.format(completedAt)
-    }
-
-    override fun toString(): String {
-        return "TodoTask(taskId='$taskId', description='$description', completed=$completed, completedAt=$completedAt)"
     }
 }

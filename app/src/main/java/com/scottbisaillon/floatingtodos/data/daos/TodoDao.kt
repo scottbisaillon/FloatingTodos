@@ -6,21 +6,14 @@ import com.scottbisaillon.floatingtodos.data.entities.Todo
 import com.scottbisaillon.floatingtodos.data.entities.TodoWithTasks
 
 @Dao
-interface TodoDao {
-
-    @Insert
-    suspend fun insertTodo(todo: Todo): Long
-
-    @Update
-    suspend fun updateTodo(todo: Todo)
-
+abstract class TodoDao : BaseDao<Todo>() {
     @Transaction
     @Query("SELECT * FROM todos where id = :todoId")
-    fun getTodoWithTasks(todoId: Long): LiveData<TodoWithTasks>
+    abstract fun getTodoWithTasks(todoId: Long): LiveData<TodoWithTasks>
 
     @Query("SELECT * FROM todos where id = :todoId")
-    fun getTodo(todoId: Long): LiveData<Todo>
+    abstract fun getTodo(todoId: Long): LiveData<Todo>
 
     @Query("SELECT * FROM todos")
-    fun getAllTodos(): LiveData<List<Todo>>
+    abstract fun getAllTodos(): LiveData<List<Todo>>
 }
