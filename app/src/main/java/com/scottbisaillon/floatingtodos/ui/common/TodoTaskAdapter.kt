@@ -14,10 +14,6 @@ class TodoTaskAdapter(
 ) :
     ListAdapter<TodoTask, TodoTaskAdapter.ViewHolder>(TASK_COMPARATOR) {
 
-    init {
-        setHasStableIds(true)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
             TaskListItemBinding.inflate(
@@ -32,15 +28,6 @@ class TodoTaskAdapter(
         if (todoTask != null) {
             holder.bind(todoTask)
         }
-    }
-
-    override fun getItemId(position: Int): Long {
-
-        return (UUID.fromString(getItem(position).taskId).mostSignificantBits) and Long.MAX_VALUE
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return position
     }
 
     class ViewHolder(

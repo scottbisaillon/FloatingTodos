@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scottbisaillon.floatingtodos.data.entities.Todo
 import com.scottbisaillon.floatingtodos.databinding.TodoListItemBinding
 
-class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallback()) {
+class TodoListAdapter(private val deleteTodo: (todo: Todo) -> Unit) : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return TodoViewHolder(
@@ -18,7 +18,8 @@ class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallb
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            deleteTodo
         )
     }
 
@@ -27,14 +28,17 @@ class TodoListAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(TodoDiffCallb
         (holder as TodoViewHolder).bind(current)
     }
 
-
-    class TodoViewHolder(private val binding: TodoListItemBinding) :
+    class TodoViewHolder(private val binding: TodoListItemBinding, private val deleteTodo: (todo: Todo) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setClickListener {
                 binding.todo?.let { todo ->
                     navigateToTodo(todo, it)
                 }
+            }
+            binding.layout.setOnLongClickListener {
+                binding.todo?.let { deleteTodo.invoke(it) }
+                true
             }
         }
 

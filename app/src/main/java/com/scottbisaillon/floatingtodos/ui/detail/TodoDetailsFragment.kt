@@ -22,8 +22,6 @@ import com.scottbisaillon.floatingtodos.utilities.InjectorUtils
 
 class TodoDetailsFragment : BaseFragment() {
 
-    private val TAG = "TodoDetailsFragment"
-
     private val args: TodoDetailsFragmentArgs by navArgs()
 
     private lateinit var binding: TodoDetailsFragmentBinding;
@@ -39,7 +37,7 @@ class TodoDetailsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            todoDetailsViewModel.updateTodo(binding.todoTitle.text.toString())
+            todoDetailsViewModel.save(binding.todoTitle.text.toString())
             findNavController().navigateUp()
         }
     }
@@ -59,7 +57,7 @@ class TodoDetailsFragment : BaseFragment() {
             todoTitle.setOnEditorActionListener { view, i, _ ->
                 when (i) {
                     EditorInfo.IME_ACTION_DONE -> {
-                        todoDetailsViewModel.updateTodo(view.text.toString())
+                        todoDetailsViewModel.save(view.text.toString())
                         todoTitle.clearFocus()
                     }
                 }
@@ -69,11 +67,9 @@ class TodoDetailsFragment : BaseFragment() {
             executePendingBindings()
         }
 
-        // FIXME: There is a flicker when a task is deleted
         todoTaskAdapter = TodoTaskAdapter(todoDetailsViewModel::removeTask)
         addNewTaskAdapter = AddNewTaskAdapter { todoDetailsViewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
-            ConcatAdapter.Config.Builder().setIsolateViewTypes(true).setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS).build(),
             todoTaskAdapter,
             addNewTaskAdapter,
         )
@@ -90,7 +86,7 @@ class TodoDetailsFragment : BaseFragment() {
     }
 
     override fun onNavigateUp() {
-        todoDetailsViewModel.save(binding.todoTitle.toString())
+        todoDetailsViewModel.save(binding.todoTitle.text.toString())
         hideKeyboard()
     }
 }

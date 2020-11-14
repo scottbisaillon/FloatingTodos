@@ -23,7 +23,7 @@ class TodoListFragment : BaseFragment() {
         val binding = TodoListFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val adapter = TodoListAdapter()
+        val adapter = TodoListAdapter(viewModel::deleteTodo)
         binding.todoList.adapter = adapter
 
         viewModel.todoList.observe(viewLifecycleOwner) { todoList ->

@@ -19,6 +19,10 @@ class TodoRepository(private val todoDao: TodoDao, private val todoTaskDao: Todo
         todoDao.update(todo)
     }
 
+    suspend fun deleteTodo(todo: Todo) {
+        todoDao.delete(todo)
+    }
+
     fun getTodoWithTasks(todoId: Long): LiveData<TodoWithTasks> = todoDao.getTodoWithTasks(todoId)
 
     suspend fun insertTodoTasks(todoTask: List<TodoTask>) {
