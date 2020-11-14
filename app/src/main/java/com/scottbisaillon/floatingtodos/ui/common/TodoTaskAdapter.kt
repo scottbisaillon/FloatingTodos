@@ -1,5 +1,7 @@
 package com.scottbisaillon.floatingtodos.ui.common
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +12,8 @@ import com.scottbisaillon.floatingtodos.databinding.TaskListItemBinding
 import java.util.*
 
 class TodoTaskAdapter(
-    private val removeTask: (todoTask: TodoTask?) -> Unit
+    private val updateTask: ((todoTask: TodoTask) -> Unit)?,
+    private val removeTask: (todoTask: TodoTask) -> Unit
 ) :
     ListAdapter<TodoTask, TodoTaskAdapter.ViewHolder>(TASK_COMPARATOR) {
 
@@ -20,7 +23,7 @@ class TodoTaskAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ), removeTask
+            ), updateTask, removeTask
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -32,11 +35,26 @@ class TodoTaskAdapter(
 
     class ViewHolder(
         private val binding: TaskListItemBinding,
-        private val removeTask: (todoTask: TodoTask?) -> Unit
+        private val updateTask: ((todoTask: TodoTask) -> Unit)?,
+        private val removeTask: (todoTask: TodoTask) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
+            binding.todoTaskDescription.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    binding.todoTask?.let {
+                        updateTask?.invoke(it)
+                    }
+                }
+            })
+
             binding.removeButton.setOnClickListener {
-                removeTask.invoke(binding.todoTask)
+                binding.todoTask?.let {
+                    removeTask.invoke(it)
+                }
             }
         }
 

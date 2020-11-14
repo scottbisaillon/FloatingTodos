@@ -35,7 +35,7 @@ class NewTodoFragment : BaseFragment() {
             Navigation.findNavController(it).popBackStack()
         }
 
-        todoTaskAdapter = TodoTaskAdapter(viewModel::removeTask)
+        todoTaskAdapter = TodoTaskAdapter(updateTask = null, removeTask = viewModel::removeTask)
         val addNewTaskAdapter = AddNewTaskAdapter { viewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
             todoTaskAdapter,

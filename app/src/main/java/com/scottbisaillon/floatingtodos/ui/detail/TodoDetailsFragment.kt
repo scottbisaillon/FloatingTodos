@@ -53,7 +53,6 @@ class TodoDetailsFragment : BaseFragment() {
             viewModel = todoDetailsViewModel
             lifecycleOwner = viewLifecycleOwner
 
-            // TODO: Add a text watcher to determine if any data has changed
             todoTitle.setOnEditorActionListener { view, i, _ ->
                 when (i) {
                     EditorInfo.IME_ACTION_DONE -> {
@@ -67,7 +66,7 @@ class TodoDetailsFragment : BaseFragment() {
             executePendingBindings()
         }
 
-        todoTaskAdapter = TodoTaskAdapter(todoDetailsViewModel::removeTask)
+        todoTaskAdapter = TodoTaskAdapter(todoDetailsViewModel::updateTodoTask,  todoDetailsViewModel::removeTask)
         addNewTaskAdapter = AddNewTaskAdapter { todoDetailsViewModel.addNewTask() }
         binding.taskList.adapter = ConcatAdapter(
             todoTaskAdapter,
@@ -75,11 +74,7 @@ class TodoDetailsFragment : BaseFragment() {
         )
 
         todoDetailsViewModel.todoWithTasks.observe(viewLifecycleOwner) { todoWithTasks ->
-            todoDetailsViewModel.todoTaskList.value = todoWithTasks.tasks
-        }
-
-        todoDetailsViewModel.todoTaskList.observe(viewLifecycleOwner) { taskList ->
-            todoTaskAdapter.submitList(ArrayList(taskList))
+            todoTaskAdapter.submitList(todoWithTasks.tasks)
         }
 
         return binding.root
